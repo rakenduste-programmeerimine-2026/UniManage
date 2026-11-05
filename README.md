@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# UniManage
 
-## Getting Started
+UniManage is a web platform that helps school council boards manage their members, events, and documents in one place, so they don't have to rely on a scattered Google Drive folder.
 
-First, run the development server:
+## Team
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+| Member | GitHub | Starting role |
+|---|---|---|
+| Marcus Haljasoks | [@matuhaljas](https://github.com/matuhaljas) | Backend |
+| Kevin Saluste | [@salustek](https://github.com/salustek) | Database & QA |
+| Samuel Beekmann | [@SamBeku](https://github.com/SamBeku) | Frontend |
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## The problem
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Running a student body involves a lot of documents that need to be kept on track. Council boards deal with this every week.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**Intended users:** School council boards
 
-## Learn More
+**Current workaround:** A shared Google Drive folder with many separate files.
 
-To learn more about Next.js, take a look at the following resources:
+## Core features
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The prototype focuses on three core features:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **Login** – board members sign in to the platform.
+2. **Member list** – view the members of the student body.
+3. **Events** – list events and add members to an event.
 
-## Deploy on Vercel
+## Tech stack
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Database & auth:** [Supabase](https://supabase.com) (client, DB schema and generated types)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Roadmap
+
+Work is tracked in [GitHub Issues](https://github.com/rakenduste-programmeerimine-2026/UniManage/issues).
+
+### Setup
+- [ ] [#14](https://github.com/rakenduste-programmeerimine-2026/UniManage/issues/14) Add Supabase client, DB schema and generated types
+
+### Members
+- [ ] [#2](https://github.com/rakenduste-programmeerimine-2026/UniManage/issues/2) Backend: member CRUD, search and profile
+- [ ] [#3](https://github.com/rakenduste-programmeerimine-2026/UniManage/issues/3) Frontend: member list, form and profile pages
+
+### Board
+- [ ] [#4](https://github.com/rakenduste-programmeerimine-2026/UniManage/issues/4) Backend: board roles and term history
+- [ ] [#5](https://github.com/rakenduste-programmeerimine-2026/UniManage/issues/5) Frontend: current board and term history pages
+
+### Events
+- [ ] [#6](https://github.com/rakenduste-programmeerimine-2026/UniManage/issues/6) Backend: events, participants and event summary
+- [ ] [#7](https://github.com/rakenduste-programmeerimine-2026/UniManage/issues/7) Frontend: event list, form, participants and summary pages
+
+### Activity table
+- [ ] [#8](https://github.com/rakenduste-programmeerimine-2026/UniManage/issues/8) Backend: points calculation and leaderboard
+- [ ] [#9](https://github.com/rakenduste-programmeerimine-2026/UniManage/issues/9) Frontend: leaderboard and points correction pages
+
+### Budget
+- [ ] [#10](https://github.com/rakenduste-programmeerimine-2026/UniManage/issues/10) Backend: costs, budget balance and overspend warning
+- [ ] [#11](https://github.com/rakenduste-programmeerimine-2026/UniManage/issues/11) Frontend: cost form, budget status and cost breakdown pages
+
+### Reports
+- [ ] [#12](https://github.com/rakenduste-programmeerimine-2026/UniManage/issues/12) Backend: activity, cost and growth report queries
+- [ ] [#13](https://github.com/rakenduste-programmeerimine-2026/UniManage/issues/13) Frontend: reports page with tables and charts
+
+## Findings from the user contact
+
+- The problem comes up on a **weekly basis**.
+- The ideal solution would let all manageable files be written to and maintained **directly through the platform**.
+
+**Contact:** A member of the TLÜ (Tallinn University) student council board.
+
+**Consent:** The contact has agreed to prototype testing, recorded classroom feedback, and sharing their private contact details with the teacher if needed.
+
+## Success criterion
+
+The project is considered successful when all **three core features** listed above are implemented and working.
