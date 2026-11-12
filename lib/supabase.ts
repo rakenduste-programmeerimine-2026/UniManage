@@ -1,6 +1,19 @@
-// TODO(supabase): placeholder. Replace with the real server client from the Supabase setup (#14).
-// The backend code only needs `supabase()` to return a Supabase client.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function supabase(): Promise<any> {
-  throw new Error("Supabase client is not set up yet (#14).");
+import { createServerClient } from "@supabase/ssr";
+import { cookies } from "next/headers";
+
+export async function supabase() {
+  const cookieStore = await cookies();
+  return createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
+    {
+      cookies: {
+        getAll: () => cookieStore.getAll(),
+        setAll: (list) => {
+          // Server Components can't set cookies; ignore there
+          try { list.forEach(({ name, value, options }) => cookieStore.set(name, value, options)); } catch {}
+        },
+      },
+    },
+  );
 }

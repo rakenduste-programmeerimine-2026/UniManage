@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { Viga, andmed, kuupaev, taisarv, tekst, toiming, valikulineTaisarv, valikulineTekst } from "../abi";
+import { andmed, kuupaev, taisarv, tekst, toiming, valikulineTaisarv, valikulineTekst } from "../abi";
 import { supabase } from "../supabase";
 import type { Tulemus } from "../types";
 
@@ -41,14 +41,8 @@ export async function lisaOsaleja(_: Tulemus, fd: FormData): Promise<Tulemus> {
     const uritus_id = taisarv(fd, "uritus_id");
     const osalusroll_id = taisarv(fd, "osalusroll_id");
     const db = await supabase();
-    let saadud_punktid = valikulineTaisarv(fd, "saadud_punktid");
-    if (saadud_punktid === null) {
-      const roll = andmed<{ vaikepunktid: number } | null>(
-        await db.from("osalusroll").select("vaikepunktid").eq("id", osalusroll_id).maybeSingle(),
-      );
-      if (!roll) throw new Viga("Osalusrolli ei leitud.");
-      saadud_punktid = roll.vaikepunktid;
-    }
+    // null saadud_punktid is filled from osalusroll.vaikepunktid by the osalus_vaikepunktid trigger
+    const saadud_punktid = valikulineTaisarv(fd, "saadud_punktid");
     andmed(
       await db
         .from("osalus")
