@@ -11,6 +11,7 @@ const DB_VEAD: Record<string, string> = {
   "23505": "Selline kirje on juba olemas.",
   "23503": "Seotud kirjet ei leitud või seda kasutatakse mujal.",
   "23514": "Andmed ei vasta reeglitele (kontrolli kuupäevi ja summasid).",
+  "42501": "Sul pole selleks õigust.", // blocked by row-level security
 };
 
 /** Returns the data of a Supabase response, or throws. */
