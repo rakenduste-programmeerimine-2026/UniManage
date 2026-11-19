@@ -5,7 +5,7 @@ import { uritused, uritusteLiigid } from "@/lib/data/uritused";
 import type { Nimetus } from "@/lib/types";
 import { kuvaKuupaev } from "@/lib/vorming";
 import { urliId } from "../id";
-import { Lahter, Rida, Silt, Tabel, Tuhi } from "../Tabel";
+import { Lahter, Rida, Silt, Tabel, Tuhi, Vahelehed } from "../Tabel";
 
 type Aeg = "tulevased" | "moodunud";
 type Valik = { aeg: Aeg; liik: string; alates: string; kuni: string };
@@ -63,20 +63,14 @@ async function Nimekiri({ searchParams }: { searchParams: PageProps<"/uritused">
 
   return (
     <>
-      <nav className="mb-4 flex gap-1 border-b border-zinc-200 dark:border-zinc-800" aria-label="Ürituste aeg">
-        {(["tulevased", "moodunud"] as const).map((aeg) => (
-          <Link
-            key={aeg}
-            href={listiLink({ ...valik, aeg })}
-            aria-current={valik.aeg === aeg ? "page" : undefined}
-            className={`-mb-px border-b-2 px-4 py-2 text-sm ${
-              valik.aeg === aeg ? "border-foreground font-medium" : "border-transparent text-zinc-500 hover:text-foreground"
-            }`}
-          >
-            {aeg === "tulevased" ? "Tulevased" : "Möödunud"}
-          </Link>
-        ))}
-      </nav>
+      <Vahelehed
+        nimi="Ürituste aeg"
+        lehed={(["tulevased", "moodunud"] as const).map((aeg) => ({
+          href: listiLink({ ...valik, aeg }),
+          tekst: aeg === "tulevased" ? "Tulevased" : "Möödunud",
+          valitud: valik.aeg === aeg,
+        }))}
+      />
 
       <Filtrid valik={valik} liigid={liigid} />
 

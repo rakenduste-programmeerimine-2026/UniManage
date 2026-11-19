@@ -1,6 +1,6 @@
 // Formatting helpers for the pages.
 
-const kuupaevaVorming = new Intl.DateTimeFormat("et-EE", { timeZone: "UTC" });
+const kuupaevaVorming = new Intl.DateTimeFormat("et-EE", { timeZone: "UTC", day: "2-digit", month: "2-digit", year: "numeric" });
 
 /** "2026-11-05" -> "05.11.2026". Uses UTC so the day does not shift with the server time zone. */
 export function kuvaKuupaev(iso: string): string {

@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { liikmeVordlus } from "@/lib/data/aktiivsus";
 import { liikmeProfiil } from "@/lib/data/liikmed";
 import { kuvaKuupaev } from "@/lib/vorming";
-import { Jaotis, Lahter, Rida, Silt, Tabel } from "../../Tabel";
+import { Jaotis, KasitsiMark, Lahter, Rida, Silt, Tabel } from "../../Tabel";
 import AktiivsuseNupp from "./AktiivsuseNupp";
 import { urliId } from "../../id";
 
@@ -22,8 +23,8 @@ export default function LiikmeProfiilPage(props: PageProps<"/liikmed/[id]">) {
 
 async function Profiil({ params }: { params: PageProps<"/liikmed/[id]">["params"] }) {
   const id = urliId((await params).id);
-  const p = id && (await liikmeProfiil(id));
-  if (!p) notFound();
+  const [p, vordlus] = id ? await Promise.all([liikmeProfiil(id), liikmeVordlus(id, "koik")]) : [null, null];
+  if (!p || !vordlus) notFound();
 
   return (
     <>
@@ -41,6 +42,14 @@ async function Profiil({ params }: { params: PageProps<"/liikmed/[id]">["params"
           <div className="text-right">
             <p className="text-2xl font-semibold">{p.punktid_kokku}</p>
             <p className="text-xs text-zinc-500">punkti kokku</p>
+          </div>
+          <div className="text-right">
+            <p className="text-2xl font-semibold text-zinc-500">{vordlus.keskmine}</p>
+            <p className="text-xs text-zinc-500">
+              <Link href="/aktiivsus" className="hover:underline">
+                aktiivsete liikmete keskmine
+              </Link>
+            </p>
           </div>
           <AktiivsuseNupp id={p.id} nimi={`${p.eesnimi} ${p.perekonnanimi}`} aktiivne={p.aktiivne !== false} />
           <Link
@@ -82,7 +91,10 @@ async function Profiil({ params }: { params: PageProps<"/liikmed/[id]">["params"
                 <Lahter>{o.uritus.nimi}</Lahter>
                 <Lahter>{kuvaKuupaev(o.uritus.kuupaev)}</Lahter>
                 <Lahter>{o.osalusroll.nimetus}</Lahter>
-                <Lahter>{o.saadud_punktid}</Lahter>
+                <Lahter>
+                  {o.saadud_punktid}
+                  <KasitsiMark punktid={o.saadud_punktid} vaikepunktid={o.osalusroll.vaikepunktid} />
+                </Lahter>
               </Rida>
             ))}
           </Tabel>
