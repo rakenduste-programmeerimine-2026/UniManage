@@ -3,16 +3,17 @@ import { supabase } from "../supabase";
 import { summa } from "../arvutused";
 import type { Liige, Nimetus } from "../types";
 
-export type LiikmeOtsing = { otsing?: string; aasta?: number };
+export type LiikmeOtsing = { otsing?: string; aasta?: number; aktiivne?: boolean };
 
-/** Members that match all words of the search (first or last name) and the join year. */
-export async function liikmed({ otsing, aasta }: LiikmeOtsing = {}): Promise<Liige[]> {
+/** Members that match all words of the search (first or last name), the join year and the active status. */
+export async function liikmed({ otsing, aasta, aktiivne }: LiikmeOtsing = {}): Promise<Liige[]> {
   const db = await supabase();
   let q = db.from("liige").select("*");
   // Remove characters that have a meaning in PostgREST filters.
   for (const sona of (otsing ?? "").replace(/[,()*%\\"]/g, " ").split(/\s+/).filter(Boolean)) {
     q = q.or(`eesnimi.ilike.%${sona}%,perekonnanimi.ilike.%${sona}%`);
   }
+  if (aktiivne !== undefined) q = q.eq("aktiivne", aktiivne);
   if (aasta) q = q.gte("liitumise_kp", `${aasta}-01-01`).lte("liitumise_kp", `${aasta}-12-31`);
   return andmed(await q.order("perekonnanimi").order("eesnimi"));
 }

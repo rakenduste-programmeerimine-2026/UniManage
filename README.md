@@ -30,6 +30,10 @@ The prototype focuses on three core features:
 
 - **Database & auth:** [Supabase](https://supabase.com) (client, DB schema and generated types)
 
+## Database migrations
+
+Schema changes are in `supabase/migrations/`. After pulling new migrations, apply them to the Supabase project, either with `supabase db push` or by running the new `.sql` files in the Supabase SQL editor. Until then, pages that use a new column show the message "Andmebaas on koodist maas".
+
 ## Roadmap
 
 Work is tracked in [GitHub Issues](https://github.com/rakenduste-programmeerimine-2026/UniManage/issues).

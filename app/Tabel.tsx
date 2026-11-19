@@ -59,3 +59,12 @@ export function Rida({ children }: { children: ReactNode }) {
 export function Lahter({ children, className = "" }: { children?: ReactNode; className?: string }) {
   return <td className={`px-3 py-2 ${className}`}>{children}</td>;
 }
+
+/** Small label, e.g. "Mitteaktiivne" or "Tühistatud". */
+export function Silt({ children }: { children: ReactNode }) {
+  return (
+    <span className="ml-2 inline-block rounded-full bg-zinc-200 px-2 py-0.5 align-middle text-xs font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+      {children}
+    </span>
+  );
+}
