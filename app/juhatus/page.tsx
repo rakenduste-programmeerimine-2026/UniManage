@@ -6,6 +6,7 @@ import { juhatuseAjalugu, praeguneJuhatus, rollid } from "@/lib/data/juhatus";
 import { liikmed } from "@/lib/data/liikmed";
 import type { JuhatuseRida } from "@/lib/types";
 import { kuvaKuupaev } from "@/lib/vorming";
+import { urliId } from "../id";
 import { Jaotis, Lahter, Rida, Tabel } from "../Tabel";
 import LopetaRoll from "./LopetaRoll";
 import RolliVorm from "./RolliVorm";
@@ -35,7 +36,7 @@ async function Sisu({ searchParams }: { searchParams: PageProps<"/juhatus">["sea
   const { liige } = await searchParams;
   // praeguneJuhatus and tana use the current date, so render at request time only.
   await connection();
-  const liigeId = typeof liige === "string" && /^[1-9]\d*$/.test(liige) ? Number(liige) : null;
+  const liigeId = urliId(liige);
   const [praegune, ajalugu, koikLiikmed, koikRollid] = await Promise.all([
     praeguneJuhatus(),
     juhatuseAjalugu(),

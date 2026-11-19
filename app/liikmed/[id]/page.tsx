@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import { liikmeProfiil } from "@/lib/data/liikmed";
 import { kuvaKuupaev } from "@/lib/vorming";
 import { Jaotis, Lahter, Rida, Tabel } from "../../Tabel";
-import { liikmeId } from "./liikmeId";
+import { urliId } from "../../id";
 
 export default function LiikmeProfiilPage(props: PageProps<"/liikmed/[id]">) {
   return (
@@ -20,7 +20,7 @@ export default function LiikmeProfiilPage(props: PageProps<"/liikmed/[id]">) {
 }
 
 async function Profiil({ params }: { params: PageProps<"/liikmed/[id]">["params"] }) {
-  const id = liikmeId((await params).id);
+  const id = urliId((await params).id);
   const p = id && (await liikmeProfiil(id));
   if (!p) notFound();
 
