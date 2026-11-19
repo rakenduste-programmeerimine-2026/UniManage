@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { liikmeProfiil } from "@/lib/data/liikmed";
 import LiikmeVorm from "../../LiikmeVorm";
-import { liikmeId } from "../liikmeId";
+import { urliId } from "../../../id";
 
 export default function MuudaLiigetPage(props: PageProps<"/liikmed/[id]/muuda">) {
   return (
@@ -16,7 +16,7 @@ export default function MuudaLiigetPage(props: PageProps<"/liikmed/[id]/muuda">)
 }
 
 async function Sisu({ params }: { params: PageProps<"/liikmed/[id]/muuda">["params"] }) {
-  const id = liikmeId((await params).id);
+  const id = urliId((await params).id);
   const profiil = id && (await liikmeProfiil(id));
   if (!profiil) notFound();
   const { eesnimi, perekonnanimi, email, liitumise_kp } = profiil;
