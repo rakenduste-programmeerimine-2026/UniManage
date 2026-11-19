@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { connection } from "next/server";
 import { Suspense } from "react";
 import { liikmeVordlus } from "@/lib/data/aktiivsus";
 import { liikmeProfiil } from "@/lib/data/liikmed";
@@ -23,8 +24,11 @@ export default function LiikmeProfiilPage(props: PageProps<"/liikmed/[id]">) {
 
 async function Profiil({ params }: { params: PageProps<"/liikmed/[id]">["params"] }) {
   const id = urliId((await params).id);
-  const [p, vordlus] = id ? await Promise.all([liikmeProfiil(id), liikmeVordlus(id, "koik")]) : [null, null];
-  if (!p || !vordlus) notFound();
+  const p = id && (await liikmeProfiil(id));
+  if (!p) notFound();
+  // liikmeVordlus reads today's date, so render at request time only.
+  await connection();
+  const vordlus = await liikmeVordlus(p.id, "koik");
 
   return (
     <>
