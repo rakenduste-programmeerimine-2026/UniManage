@@ -9,6 +9,8 @@ import { Jaotis, KasitsiMark, Lahter, Rida, Silt, Tabel } from "../../Tabel";
 import PunktideVorm from "./PunktideVorm";
 import TuhistaUritus from "./TuhistaUritus";
 import EemaldaOsaleja from "./EemaldaOsaleja";
+import KuluRida from "./KuluRida";
+import KuluVorm from "./KuluVorm";
 import OsalejaVorm from "./OsalejaVorm";
 
 export default function UritusPage(props: PageProps<"/uritused/[id]">) {
@@ -104,16 +106,19 @@ async function Kokkuvote({ params }: { params: PageProps<"/uritused/[id]">["para
         )}
       </Jaotis>
 
+      <section className="mb-8">
+        <h2 className="mb-2 text-lg font-semibold">Lisa kulu</h2>
+        <KuluVorm uritusId={u.id} />
+      </section>
+
       <Jaotis pealkiri="Kulud" tuhi="Üritusel ei ole kulusid.">
         {u.kulu.length > 0 && (
-          <Tabel veerud={["Kuupäev", "Kirjeldus", "Summa"]}>
-            {u.kulu.map((k) => (
-              <Rida key={k.id}>
-                <Lahter>{kuvaKuupaev(k.kuupaev)}</Lahter>
-                <Lahter>{k.kirjeldus ?? "—"}</Lahter>
-                <Lahter>{kuvaRaha(k.summa)}</Lahter>
-              </Rida>
-            ))}
+          <Tabel veerud={["Kuupäev", "Kirjeldus", "Summa", <span key="t" className="sr-only">Toimingud</span>]}>
+            {u.kulu
+              .toSorted((a, b) => b.kuupaev.localeCompare(a.kuupaev) || b.id - a.id)
+              .map((k) => (
+                <KuluRida key={k.id} uritusId={u.id} kulu={k} />
+              ))}
           </Tabel>
         )}
       </Jaotis>
