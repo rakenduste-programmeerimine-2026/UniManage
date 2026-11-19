@@ -5,7 +5,8 @@ import { liikmed } from "@/lib/data/liikmed";
 import { osalusrollid, urituseKokkuvote } from "@/lib/data/uritused";
 import { kuvaKuupaev, kuvaRaha } from "@/lib/vorming";
 import { urliId } from "../../id";
-import { Jaotis, Lahter, Rida, Silt, Tabel } from "../../Tabel";
+import { Jaotis, KasitsiMark, Lahter, Rida, Silt, Tabel } from "../../Tabel";
+import PunktideVorm from "./PunktideVorm";
 import TuhistaUritus from "./TuhistaUritus";
 import EemaldaOsaleja from "./EemaldaOsaleja";
 import OsalejaVorm from "./OsalejaVorm";
@@ -88,7 +89,12 @@ async function Kokkuvote({ params }: { params: PageProps<"/uritused/[id]">["para
                   </Link>
                 </Lahter>
                 <Lahter>{o.osalusroll.nimetus}</Lahter>
-                <Lahter>{o.saadud_punktid}</Lahter>
+                <Lahter>
+                  <div className="flex items-start gap-1">
+                    <PunktideVorm id={o.id} uritusId={u.id} punktid={o.saadud_punktid} />
+                    <KasitsiMark punktid={o.saadud_punktid} vaikepunktid={o.osalusroll.vaikepunktid} />
+                  </div>
+                </Lahter>
                 <Lahter className="text-right">
                   <EemaldaOsaleja id={o.id} uritusId={u.id} nimi={`${o.liige.eesnimi} ${o.liige.perekonnanimi}`} />
                 </Lahter>

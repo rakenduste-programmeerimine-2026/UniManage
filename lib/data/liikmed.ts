@@ -1,7 +1,7 @@
 import { andmed } from "../abi";
 import { supabase } from "../supabase";
 import { summa } from "../arvutused";
-import type { Liige, Nimetus } from "../types";
+import type { Liige, Nimetus, Osalusroll } from "../types";
 
 export type LiikmeOtsing = { otsing?: string; aasta?: number; aktiivne?: boolean };
 
@@ -24,7 +24,7 @@ export type LiikmeProfiil = Liige & {
     id: number;
     saadud_punktid: number;
     uritus: { id: number; nimi: string; kuupaev: string };
-    osalusroll: Nimetus;
+    osalusroll: Osalusroll;
   }[];
   punktid_kokku: number;
 };
@@ -37,7 +37,7 @@ export async function liikmeProfiil(id: number): Promise<LiikmeProfiil | null> {
       .from("liige")
       .select(
         "*, juhatuseliikmesus(id, algus_kp, lopp_kp, roll(id, nimetus)), " +
-          "osalus(id, saadud_punktid, uritus(id, nimi, kuupaev), osalusroll(id, nimetus))",
+          "osalus(id, saadud_punktid, uritus(id, nimi, kuupaev), osalusroll(id, nimetus, vaikepunktid))",
       )
       .eq("id", id)
       .maybeSingle(),

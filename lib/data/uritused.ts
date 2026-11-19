@@ -30,7 +30,7 @@ export type UrituseKokkuvote = UrituseRida & {
     id: number;
     saadud_punktid: number;
     liige: Pick<Liige, "id" | "eesnimi" | "perekonnanimi">;
-    osalusroll: Nimetus;
+    osalusroll: Osalusroll;
   }[];
   kulu: Pick<Kulu, "id" | "summa" | "kirjeldus" | "kuupaev">[];
   punktid_kokku: number;
@@ -47,7 +47,7 @@ export async function urituseKokkuvote(id: number): Promise<UrituseKokkuvote | n
       .from("uritus")
       .select(
         "*, urituse_liik(id, nimetus), kulu(id, summa, kirjeldus, kuupaev), " +
-          "osalus(id, saadud_punktid, liige(id, eesnimi, perekonnanimi), osalusroll(id, nimetus))",
+          "osalus(id, saadud_punktid, liige(id, eesnimi, perekonnanimi), osalusroll(id, nimetus, vaikepunktid))",
       )
       .eq("id", id)
       .maybeSingle(),

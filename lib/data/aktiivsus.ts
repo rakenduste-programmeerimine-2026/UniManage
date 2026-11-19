@@ -25,11 +25,11 @@ export async function edetabel(valik: Valik, kp?: string): Promise<EdetabeliKirj
   return jarjesta(read).map((r) => ({ ...r, liige: nimed.get(r.liige_id)! }));
 }
 
-/** Points of one member and the average of all members in the same period. */
+/** Points of one member and the average of all active members in the same period. */
 export async function liikmeVordlus(liige_id: number, valik: Valik, kp?: string) {
   const read = await punktiRead(valik, kp);
   const db = await supabase();
-  const liikmed = await db.from("liige").select("id", { count: "exact", head: true });
+  const liikmed = await db.from("liige").select("id", { count: "exact", head: true }).eq("aktiivne", true);
   andmed(liikmed);
   return {
     punktid: read.filter((r) => r.liige_id === liige_id).reduce((s, r) => s + r.punktid, 0),
