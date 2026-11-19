@@ -32,3 +32,35 @@ export function VormiViga({ tulemus }: { tulemus: Tulemus }) {
     </p>
   );
 }
+
+type KinnitusNupuProps = {
+  toiming: Toiming;
+  /** Hidden form fields sent to the action. */
+  valjad: Record<string, string | number>;
+  kinnitus: string;
+  tekst: string;
+  ootelTekst: string;
+  /** "oht" for actions that remove or end something. */
+  stiil?: "oht" | "tavaline";
+};
+
+/** One button that runs a server action after the user confirms. Shows the error from the server. */
+export function KinnitusNupp({ toiming, valjad, kinnitus, tekst, ootelTekst, stiil = "oht" }: KinnitusNupuProps) {
+  const { tulemus, onSubmit, ootel } = useVorm(toiming, kinnitus);
+  const varv =
+    stiil === "oht"
+      ? "border-red-300 text-red-700 hover:bg-red-50 dark:border-red-800 dark:text-red-300 dark:hover:bg-red-950"
+      : "border-zinc-300 hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-900";
+
+  return (
+    <form onSubmit={onSubmit} className="flex flex-col items-end gap-1">
+      {Object.entries(valjad).map(([nimi, vaartus]) => (
+        <input key={nimi} type="hidden" name={nimi} value={vaartus} />
+      ))}
+      <button type="submit" disabled={ootel} className={`rounded-md border px-3 py-1 text-sm disabled:opacity-50 ${varv}`}>
+        {ootel ? ootelTekst : tekst}
+      </button>
+      <VormiViga tulemus={tulemus} />
+    </form>
+  );
+}

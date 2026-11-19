@@ -7,6 +7,8 @@ export type Liige = {
   perekonnanimi: string;
   email: string;
   liitumise_kp: string;
+  /** Inactive members stay in the history. Needs migration 20261119000000_liige_aktiivne. */
+  aktiivne: boolean;
 };
 
 export type Nimetus = { id: number; nimetus: string }; // ROLL, URITUSE_LIIK

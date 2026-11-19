@@ -2,9 +2,11 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { liikmed } from "@/lib/data/liikmed";
 import { kuvaKuupaev } from "@/lib/vorming";
-import { Lahter, Rida, Tabel, Tuhi } from "../Tabel";
+import { Lahter, Rida, Silt, Tabel, Tuhi } from "../Tabel";
 
-type Otsing = { otsing: string; aasta: string };
+type Otsing = { otsing: string; aasta: string; staatus: string };
+
+const STAATUSED: Record<string, boolean> = { aktiivne: true, mitteaktiivne: false };
 
 /** Reads one string value from the search params. */
 function vaartus(v: string | string[] | undefined): string {
@@ -32,9 +34,9 @@ export default function LiikmedPage(props: PageProps<"/liikmed">) {
 
 async function Nimekiri({ searchParams }: { searchParams: PageProps<"/liikmed">["searchParams"] }) {
   const sp = await searchParams;
-  const valik: Otsing = { otsing: vaartus(sp.otsing), aasta: vaartus(sp.aasta) };
+  const valik: Otsing = { otsing: vaartus(sp.otsing), aasta: vaartus(sp.aasta), staatus: vaartus(sp.staatus) };
   const aasta = /^\d{4}$/.test(valik.aasta) ? Number(valik.aasta) : undefined;
-  const read = await liikmed({ otsing: valik.otsing || undefined, aasta });
+  const read = await liikmed({ otsing: valik.otsing || undefined, aasta, aktiivne: STAATUSED[valik.staatus] });
 
   return (
     <>
@@ -50,6 +52,7 @@ async function Nimekiri({ searchParams }: { searchParams: PageProps<"/liikmed">[
                 <Link href={`/liikmed/${l.id}`} className="font-medium hover:underline">
                   {l.eesnimi} {l.perekonnanimi}
                 </Link>
+                {l.aktiivne === false && <Silt>Mitteaktiivne</Silt>}
               </Lahter>
               <Lahter>{l.email}</Lahter>
               <Lahter>{kuvaKuupaev(l.liitumise_kp)}</Lahter>
@@ -87,10 +90,18 @@ function Filtrid({ valik }: { valik: Otsing }) {
           className={`${valja} w-32`}
         />
       </label>
+      <label className="flex flex-col gap-1 text-sm">
+        Staatus
+        <select name="staatus" defaultValue={valik.staatus} className={valja}>
+          <option value="">Kõik</option>
+          <option value="aktiivne">Aktiivsed</option>
+          <option value="mitteaktiivne">Mitteaktiivsed</option>
+        </select>
+      </label>
       <button type="submit" className="rounded-md border border-zinc-300 px-4 py-2 text-sm dark:border-zinc-700">
         Otsi
       </button>
-      {(valik.otsing || valik.aasta) && (
+      {(valik.otsing || valik.aasta || valik.staatus) && (
         <Link href="/liikmed" className="py-2 text-sm text-zinc-500 hover:underline">
           Tühjenda
         </Link>

@@ -6,7 +6,7 @@ import { lisaLiige, muudaLiiget } from "@/lib/actions/liikmed";
 import type { Liige } from "@/lib/types";
 import { useVorm, VormiViga } from "../vorm";
 
-type Props = { liige?: Liige };
+type Props = { liige?: Omit<Liige, "aktiivne"> };
 
 /** Add form without `liige`, edit form with `liige`. Shows the validation errors from the server. */
 export default function LiikmeVorm({ liige }: Props) {

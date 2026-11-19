@@ -12,6 +12,7 @@ const DB_VEAD: Record<string, string> = {
   "23503": "Seotud kirjet ei leitud või seda kasutatakse mujal.",
   "23514": "Andmed ei vasta reeglitele (kontrolli kuupäevi ja summasid).",
   "42501": "Sul pole selleks õigust.", // blocked by row-level security
+  "42703": "Andmebaas on koodist maas: käivita uued migratsioonid (supabase/migrations).", // unknown column
 };
 
 /** Returns the data of a Supabase response, or throws. */
