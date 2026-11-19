@@ -1,28 +1,21 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { startTransition, useActionState, useEffect, type FormEvent } from "react";
+import { useEffect } from "react";
 import { lisaLiige, muudaLiiget } from "@/lib/actions/liikmed";
 import type { Liige } from "@/lib/types";
+import { useVorm, VormiViga } from "../vorm";
 
 type Props = { liige?: Liige };
 
 /** Add form without `liige`, edit form with `liige`. Shows the validation errors from the server. */
 export default function LiikmeVorm({ liige }: Props) {
   const router = useRouter();
-  const [tulemus, saada, ootel] = useActionState(liige ? muudaLiiget : lisaLiige, null);
+  const { tulemus, onSubmit, ootel } = useVorm(liige ? muudaLiiget : lisaLiige);
 
   useEffect(() => {
     if (tulemus && "ok" in tulemus) router.push(liige ? `/liikmed/${liige.id}` : "/liikmed");
   }, [tulemus, liige, router]);
-
-  // Call the action from onSubmit instead of <form action>, so React does not clear the fields
-  // when the server returns an error.
-  function onSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    startTransition(() => saada(fd));
-  }
 
   const valja = "rounded-md border border-zinc-300 bg-background px-3 py-2 dark:border-zinc-700";
 
@@ -46,11 +39,7 @@ export default function LiikmeVorm({ liige }: Props) {
         <input type="date" name="liitumise_kp" required defaultValue={liige?.liitumise_kp} className={valja} />
       </label>
 
-      {tulemus && "error" in tulemus && (
-        <p role="alert" className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-950 dark:text-red-300">
-          {tulemus.error}
-        </p>
-      )}
+      <VormiViga tulemus={tulemus} />
 
       <div className="flex gap-3">
         <button
