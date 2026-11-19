@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { andmed, kuupaev, taisarv, tekst, toiming, valikulineTaisarv, valikulineTekst } from "../abi";
+import { Viga, andmed, kuupaev, taisarv, tekst, toiming, valikulineTaisarv, valikulineTekst } from "../abi";
 import { supabase } from "../supabase";
 import type { Tulemus } from "../types";
 
@@ -19,6 +19,20 @@ export async function lisaUritus(_: Tulemus, fd: FormData): Promise<Tulemus> {
     const db = await supabase();
     andmed(await db.from("uritus").insert(urituseVorm(fd)));
     revalidatePath("/uritused");
+  });
+}
+
+/** Cancels an event (`tuhistatud=true`). The event, its participants and costs are not deleted. */
+export async function tuhistaUritus(_: Tulemus, fd: FormData): Promise<Tulemus> {
+  return toiming(async () => {
+    const id = taisarv(fd, "id");
+    const db = await supabase();
+    const muudetud = andmed<unknown[]>(
+      await db.from("uritus").update({ tuhistatud: true }).eq("id", id).eq("tuhistatud", false).select("id"),
+    );
+    if (!muudetud.length) throw new Viga("Üritus on juba tühistatud või seda ei leitud.");
+    revalidatePath("/uritused");
+    revalidatePath(`/uritused/${id}`);
   });
 }
 

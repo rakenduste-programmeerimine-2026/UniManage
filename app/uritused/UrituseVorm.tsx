@@ -6,7 +6,7 @@ import { lisaUritus, muudaUritust } from "@/lib/actions/uritused";
 import type { Nimetus, Uritus } from "@/lib/types";
 import { useVorm, VormiViga } from "../vorm";
 
-type Props = { liigid: Nimetus[]; uritus?: Uritus };
+type Props = { liigid: Nimetus[]; uritus?: Omit<Uritus, "tuhistatud"> };
 
 /** Create form without `uritus`, edit form with `uritus`. */
 export default function UrituseVorm({ liigid, uritus }: Props) {

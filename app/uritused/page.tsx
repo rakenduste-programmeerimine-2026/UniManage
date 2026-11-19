@@ -5,7 +5,7 @@ import { uritused, uritusteLiigid } from "@/lib/data/uritused";
 import type { Nimetus } from "@/lib/types";
 import { kuvaKuupaev } from "@/lib/vorming";
 import { urliId } from "../id";
-import { Lahter, Rida, Tabel, Tuhi } from "../Tabel";
+import { Lahter, Rida, Silt, Tabel, Tuhi } from "../Tabel";
 
 type Aeg = "tulevased" | "moodunud";
 type Valik = { aeg: Aeg; liik: string; alates: string; kuni: string };
@@ -90,6 +90,7 @@ async function Nimekiri({ searchParams }: { searchParams: PageProps<"/uritused">
                 <Link href={`/uritused/${u.id}`} className="font-medium hover:underline">
                   {u.nimi}
                 </Link>
+                {u.tuhistatud && <Silt>Tühistatud</Silt>}
               </Lahter>
               <Lahter>{kuvaKuupaev(u.kuupaev)}</Lahter>
               <Lahter>{u.urituse_liik.nimetus}</Lahter>

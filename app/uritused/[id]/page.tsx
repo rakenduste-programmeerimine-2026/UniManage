@@ -5,7 +5,8 @@ import { liikmed } from "@/lib/data/liikmed";
 import { osalusrollid, urituseKokkuvote } from "@/lib/data/uritused";
 import { kuvaKuupaev, kuvaRaha } from "@/lib/vorming";
 import { urliId } from "../../id";
-import { Jaotis, Lahter, Rida, Tabel } from "../../Tabel";
+import { Jaotis, Lahter, Rida, Silt, Tabel } from "../../Tabel";
+import TuhistaUritus from "./TuhistaUritus";
 import EemaldaOsaleja from "./EemaldaOsaleja";
 import OsalejaVorm from "./OsalejaVorm";
 
@@ -40,18 +41,24 @@ async function Kokkuvote({ params }: { params: PageProps<"/uritused/[id]">["para
     <>
       <div className="mb-6 mt-2 flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold">{u.nimi}</h1>
+          <h1 className="text-2xl font-semibold">
+            {u.nimi}
+            {u.tuhistatud && <Silt>Tühistatud</Silt>}
+          </h1>
           <p className="text-sm text-zinc-500">
             {kuvaKuupaev(u.kuupaev)} · {u.urituse_liik.nimetus}
             {u.koht && ` · ${u.koht}`}
           </p>
         </div>
-        <Link
-          href={`/uritused/${u.id}/muuda`}
-          className="rounded-md border border-zinc-300 px-4 py-2 text-sm dark:border-zinc-700"
-        >
-          Muuda
-        </Link>
+        <div className="flex items-start gap-3">
+          {u.tuhistatud === false && <TuhistaUritus id={u.id} nimi={u.nimi} />}
+          <Link
+            href={`/uritused/${u.id}/muuda`}
+            className="rounded-md border border-zinc-300 px-4 py-2 text-sm dark:border-zinc-700"
+          >
+            Muuda
+          </Link>
+        </div>
       </div>
 
       <div className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-4">

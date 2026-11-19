@@ -31,6 +31,8 @@ export type Uritus = {
   kuupaev: string;
   koht: string | null;
   liik_id: number;
+  /** Cancelled events stay in the list. Needs migration 20261119000100_uritus_tuhistatud. */
+  tuhistatud: boolean;
 };
 
 export type Osalus = {
