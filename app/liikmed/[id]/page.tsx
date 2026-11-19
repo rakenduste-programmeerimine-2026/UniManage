@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Suspense, type ReactNode } from "react";
+import { Suspense } from "react";
 import { liikmeProfiil } from "@/lib/data/liikmed";
 import { kuvaKuupaev } from "@/lib/vorming";
+import { Jaotis, Lahter, Rida, Tabel } from "../../Tabel";
 import { liikmeId } from "./liikmeId";
 
 export default function LiikmeProfiilPage(props: PageProps<"/liikmed/[id]">) {
@@ -48,15 +49,23 @@ async function Profiil({ params }: { params: PageProps<"/liikmed/[id]">["params"
         </div>
       </div>
 
-      <Jaotis pealkiri="Juhatuse ajalugu" tuhi="Liige ei ole olnud juhatuses.">
+      <Jaotis
+        pealkiri="Juhatuse ajalugu"
+        tuhi="Liige ei ole olnud juhatuses."
+        lisa={
+          <Link href={`/juhatus?liige=${p.id}`} className="text-sm hover:underline">
+            Vaata juhatuse lehel →
+          </Link>
+        }
+      >
         {p.juhatuseliikmesus.length > 0 && (
           <Tabel veerud={["Roll", "Algus", "Lõpp"]}>
             {p.juhatuseliikmesus.map((j) => (
-              <tr key={j.id} className="border-t border-zinc-200 dark:border-zinc-800">
-                <td className="px-3 py-2">{j.roll.nimetus}</td>
-                <td className="px-3 py-2">{kuvaKuupaev(j.algus_kp)}</td>
-                <td className="px-3 py-2">{j.lopp_kp ? kuvaKuupaev(j.lopp_kp) : "praegu"}</td>
-              </tr>
+              <Rida key={j.id}>
+                <Lahter>{j.roll.nimetus}</Lahter>
+                <Lahter>{kuvaKuupaev(j.algus_kp)}</Lahter>
+                <Lahter>{j.lopp_kp ? kuvaKuupaev(j.lopp_kp) : "praegu"}</Lahter>
+              </Rida>
             ))}
           </Tabel>
         )}
@@ -66,49 +75,16 @@ async function Profiil({ params }: { params: PageProps<"/liikmed/[id]">["params"
         {p.osalus.length > 0 && (
           <Tabel veerud={["Üritus", "Kuupäev", "Roll", "Punktid"]}>
             {p.osalus.map((o) => (
-              <tr key={o.id} className="border-t border-zinc-200 dark:border-zinc-800">
-                <td className="px-3 py-2">{o.uritus.nimi}</td>
-                <td className="px-3 py-2">{kuvaKuupaev(o.uritus.kuupaev)}</td>
-                <td className="px-3 py-2">{o.osalusroll.nimetus}</td>
-                <td className="px-3 py-2">{o.saadud_punktid}</td>
-              </tr>
+              <Rida key={o.id}>
+                <Lahter>{o.uritus.nimi}</Lahter>
+                <Lahter>{kuvaKuupaev(o.uritus.kuupaev)}</Lahter>
+                <Lahter>{o.osalusroll.nimetus}</Lahter>
+                <Lahter>{o.saadud_punktid}</Lahter>
+              </Rida>
             ))}
           </Tabel>
         )}
       </Jaotis>
     </>
-  );
-}
-
-/** Section with a heading. Shows the `tuhi` message when there are no children. */
-function Jaotis({ pealkiri, tuhi, children }: { pealkiri: string; tuhi: string; children: ReactNode }) {
-  return (
-    <section className="mb-8">
-      <h2 className="mb-2 text-lg font-semibold">{pealkiri}</h2>
-      {children || (
-        <p className="rounded-md border border-dashed border-zinc-300 p-4 text-sm text-zinc-500 dark:border-zinc-700">
-          {tuhi}
-        </p>
-      )}
-    </section>
-  );
-}
-
-function Tabel({ veerud, children }: { veerud: string[]; children: ReactNode }) {
-  return (
-    <div className="overflow-x-auto rounded-md border border-zinc-200 dark:border-zinc-800">
-      <table className="w-full text-left text-sm">
-        <thead className="bg-zinc-100 dark:bg-zinc-900">
-          <tr>
-            {veerud.map((v) => (
-              <th key={v} className="px-3 py-2">
-                {v}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>{children}</tbody>
-      </table>
-    </div>
   );
 }
