@@ -37,7 +37,7 @@ export function perioodis(q: any, valik: Valik, kp?: string) {
 
 /** Runs the body of a server action and returns a `Tulemus` for the form. */
 export async function toiming(keha: () => Promise<void>): Promise<Tulemus> {
-  // TODO(auth): check the user session here. Until then, any POST request can call the actions.
+  // Auth: the db client carries the user's session, and RLS (migration 20261123000100) rejects logged-out users.
   try {
     await keha();
     return { ok: true };
