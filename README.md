@@ -34,6 +34,10 @@ The prototype focuses on three core features:
 
 Schema changes are in `supabase/migrations/`. After pulling new migrations, apply them to the Supabase project, either with `supabase db push` or by running the new `.sql` files in the Supabase SQL editor. Until then, pages that use a new column show the message "Andmebaas on koodist maas".
 
+Only logged-in users can see data (row-level security). Create board members' accounts in the Supabase dashboard under Authentication → Users, and turn off public sign-ups there.
+
+Demo data is in `supabase/seed.sql`. Run it once on an empty database in the SQL editor (or `supabase db push --include-seed`). It stops if the `liige` table already has rows.
+
 ## Roadmap
 
 Work is tracked in [GitHub Issues](https://github.com/rakenduste-programmeerimine-2026/UniManage/issues).
